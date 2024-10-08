@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+# Ignore the media folder where uploaded files are stored
+media/
+
 # Distribution / packaging
 .Python
 build/
