@@ -1,0 +1,194 @@
+{% extends "admin/dashboard.html" %}
+{% load static %}
+
+{% block title %}
+    <title>Admin | Edit Category</title>
+{% endblock title %}
+
+{% block content %}
+<style>
+    /* Custom styles for SweetAlert */
+    .swal2-popup {
+        width: 350px; /* Adjust the width of the alert */
+        font-size: 10px; /* Adjust the font size */
+    }
+
+    .swal2-confirm,
+    .swal2-cancel {
+        padding: 8px 12px; /* Decrease button size */
+        font-size: 12px; /* Decrease font size */
+    }
+
+    /* Decrease icon size */
+    .swal2-icon {
+        font-size: 10px; /* Adjust icon size as needed */
+    }
+</style>
+
+<div class="page-content">
+    <div class="container-xxl">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12">
+                <form method="post" action="{% url 'categories_edit' category.id %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <!-- Thumbnail Upload Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Edit Thumbnail Photo</h4>
+                            <div class="mb-3" id="file-previews" style="display: flex; flex-wrap: wrap; margin-top: 10px;">
+                                {% if category.image %} <!-- Check if an image exists -->
+                                    <div class="preview-box">
+                                        <img src="{{ category.image.url }}" alt="Current Image" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; margin-right: 10px;">
+                                        <button type="button" class="btn btn-danger btn-sm remove-preview" style="margin-top: -60px; margin-left: -50px; font-weight: bold;"> X</button>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <input class="form-control mt-3" name="file" type="file" accept="image/png, image/jpeg, image/gif" id="imageUpload" {% if not category.image %}required{% endif %}>
+                        </div>
+                    </div>
+
+                    <!-- General Information Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">General Information</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <!-- Category Title -->
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
+                                        <label for="category-title" class="form-label">Category Title</label>
+                                        <input type="text" name="title" id="title" class="form-control" placeholder="Enter Title" value="{{ category.name }}" required>
+                                    </div>
+                                </div>
+
+                                <!-- Status -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="status" class="form-label">Status</label>
+                                        <select name="status" class="form-control" id="status" required>
+                                            <option value="1" {% if category.status == 1 %}selected{% endif %}>Active</option>
+                                            <option value="0" {% if category.status == 0 %}selected{% endif %}>Inactive</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Parent Category -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="p_id" class="form-label">Parent Category</label>
+                                        <select name="p_id" class="form-control" id="p_id" required>
+                                            <option selected value="">Select Parent Category</option>
+                                            {% for parent_category in parent_categories %}
+                                                <option value="{{ parent_category.id }}" {% if parent_category.id == category.parent_category.id %}selected{% endif %}>{{ parent_category.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Description -->
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
+                                        <label for="description" class="form-label">Description</label>
+                                        <textarea class="form-control bg-light-subtle" name="description" id="description" rows="5" placeholder="Type description" required>{{ category.description }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="p-3 bg-light mb-3 rounded">
+                        <div class="row justify-content-end g-2">
+                            <div class="col-lg-2">
+                                <button type="submit" class="btn btn-outline-secondary w-100">Update</button>
+                            </div>
+                            <div class="col-lg-2">
+                                <a href="{% url 'categories_list' %}" class="btn btn-primary w-100">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <script>document.write(new Date().getFullYear())</script> &copy; Aquarium E-Commerce. Developed by 
+                    <iconify-icon icon="iconamoon:heart-duotone" class="fs-18 align-middle text-danger"></iconify-icon> 
+                    <a href="https://geegatechnologies.com/" class="fw-bold footer-text" target="_blank">GeegaTechnologies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<!-- JavaScript for triggering the file input and previewing images -->
+<script>
+    document.getElementById('imageUpload').addEventListener('change', function(event) {
+        const files = event.target.files;
+        const previewsContainer = document.getElementById('file-previews');
+        previewsContainer.innerHTML = ''; // Clear previous previews
+
+        // If no files are selected, hide the full image preview
+        if (files.length === 0) {
+            document.getElementById('imageUpload').required = true;
+            return;
+        }
+
+        // Create a preview for the new image
+        Array.from(files).forEach((file) => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const previewBox = document.createElement('div');
+                previewBox.className = 'preview-box';
+                previewBox.style.position = 'relative';
+                previewBox.style.marginRight = '10px'; // Space between previews
+
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.width = '100px';
+                img.style.height = '100px';
+                img.style.objectFit = 'cover';
+                img.style.borderRadius = '8px'; // Optional: add border radius to the image
+
+                // Create a remove button for the preview
+                const removeButton = document.createElement('button');
+                removeButton.innerText = 'X';
+                removeButton.className = 'btn btn-danger btn-sm remove-preview';
+                removeButton.style.position = 'absolute';
+                removeButton.style.top = '5px';
+                removeButton.style.right = '5px';
+                removeButton.style.border = 'none';
+                removeButton.style.cursor = 'pointer';
+
+                // Remove preview functionality
+                removeButton.onclick = function() {
+                    previewBox.remove();
+                    document.getElementById('imageUpload').required = true; // Make image required if removed
+                    const dataTransfer = new DataTransfer();
+                    document.getElementById('imageUpload').files = dataTransfer.files; // Clear file input
+                };
+
+                previewBox.appendChild(img);
+                previewBox.appendChild(removeButton);
+                previewsContainer.appendChild(previewBox);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+
+    // Remove current image preview on click
+    document.querySelectorAll('.remove-preview').forEach(button => {
+        button.addEventListener('click', function() {
+            button.parentElement.remove();
+            document.getElementById('imageUpload').required = true; // Make image required when removed
+        });
+    });
+</script>
+
+{% endblock %}

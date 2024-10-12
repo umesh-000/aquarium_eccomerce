@@ -132,20 +132,3 @@ if (document.getElementById("sweetalert-params"))
             }
         });
     });
-
-
-//Custom Image
-if (document.getElementById("sweetalert-image"))
-    document.getElementById("sweetalert-image").addEventListener("click", function () {
-        Swal.fire({
-            title: 'Sweet!',
-            text: 'Modal with a custom image.',
-            imageUrl: 'assets/images/logo-sm.png',
-            imageHeight: 40,
-            confirmButtonClass: 'btn btn-primary w-xs mt-2',
-            buttonsStyling: false,
-            animation: false,
-            showCloseButton: false
-        })
-    });
-

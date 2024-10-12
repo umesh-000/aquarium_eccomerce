@@ -7,11 +7,12 @@
 <head>
      <!-- Title Meta -->
      <meta charset="utf-8" />
-     <title>Dashboard | Larkon - Responsive Admin Dashboard Template</title>
+     {% block title %}
+     <title> Master </title>
+     {% endblock title %}
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <meta name="description" content="A fully responsive premium admin dashboard template" />
-     <meta name="author" content="Techzaa" />
      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+     <meta name="csrf-token" content="{{ csrf_token }}">
 
      <!-- App favicon -->
      <link rel="shortcut icon" href="{% static '/assets/images/favicon.ico' %}">
@@ -27,13 +28,20 @@
 
      <!-- Theme Config js (Require in all Page) -->
      <script src="{% static '/assets/js/config.js' %}"></script>
+
+     <script src="{% static '/assets/js/components/extended-sweetalert.js' %}"></script>
+     <!-- CSS -->
+     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css"/>
+     <!-- Default theme -->
+     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/default.min.css"/>
+     
 </head>
 
 <body>
 
      <!-- START Wrapper -->
      <div class="wrapper">
-        {% block topbar %}
+          {% block topbar %}
           <!-- ============================ Topbar Start ============================ -->
           <header class="topbar">
                <div class="container-fluid">
@@ -650,17 +658,33 @@
      </div>
      <!-- END Wrapper -->
 
-
      <!-- Vendor Javascript (Require in all Page) -->
-     <script src="{% static '/assets/js/vendor.js' %}"></script>
-     <!-- App Javascript (Require in all Page) -->
-     <script src="{% static '/assets/js/app.js' %}"></script>
-     <!-- Vector Map Js -->
-     <script src="{% static '/assets/vendor/jsvectormap/js/jsvectormap.min.js' %}"></script>
-     <script src="{% static '/assets/vendor/jsvectormap/maps/world-merc.js' %}"></script>
-     <script src="{% static '/assets/vendor/jsvectormap/maps/world.js' %}"></script>
-     <!-- Dashboard Js -->
-     <script src="{% static '/assets/js/pages/dashboard.js' %}"></script>
-
+    <script src="{% static '/assets/js/vendor.js' %}"></script>
+    <!-- App Javascript (Require in all Page) -->
+    <script src="{% static '/assets/js/app.js' %}"></script>
+    <!-- Vector Map Js -->
+    <script src="{% static '/assets/vendor/jsvectormap/js/jsvectormap.min.js' %}"></script>
+    <script src="{% static '/assets/vendor/jsvectormap/maps/world-merc.js' %}"></script>
+    <script src="{% static '/assets/vendor/jsvectormap/maps/world.js' %}"></script>
+    <!-- Dashboard Js -->
+    <script src="{% static '/assets/js/pages/dashboard.js' %}"></script>
+    <!-- Alertify JavaScript -->
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
+    <script>
+          {% if messages %}
+          {% for message in messages %}
+               alertify.set('notifier','position', 'top-right');
+               {% if message.tags == 'success' %}
+                    alertify.success('{{ message }}');
+               {% elif message.tags == 'error' %}
+                    alertify.error('{{ message }}');
+               {% elif message.tags == 'warning' %}
+                    alertify.warning('{{ message }}');
+               {% else %}
+                    alertify.message('{{ message }}');
+               {% endif %}
+          {% endfor %}
+     {% endif %}
+    </script>
 </body>
 </html>
