@@ -1,0 +1,250 @@
+{% extends "admin/dashboard.html" %}
+{% load static %}
+
+{% block title %}
+    <title>Admin | Products Edit</title>
+{% endblock title %}
+
+{% block content %}
+<div class="page-content">
+    <div class="container-xxl">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12">
+                <form method="post" action="" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <!-- Thumbnail Upload Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Edit Thumbnail Photo</h4>
+                            <div class="mb-3" id="file-previews" style="display: flex; flex-wrap: wrap; margin-top: 10px;">
+                                <!-- Preload current thumbnail images -->
+                                {% for image in product.images.all %}
+                                    <div style="position: relative; margin-right: 10px;">
+                                        <img src="{{ image.image.url }}" alt="img" style="width: 150px; height: 150px; object-fit: cover; border-radius: 8px;">
+                                        <!-- Remove button for existing image -->
+                                        <button type="button" class="remove-btn" style="position: absolute; top: 5px; right: 5px; background-color: #ff6c2f; color: #fff; border: none; border-radius: 50%; cursor: pointer; padding: 0; width: 24px; height: 24px;">&times;</button>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <input class="form-control mt-3" name="images" type="file" accept="image/png, image/jpeg, image/gif" id="imageUpload" multiple>
+                        </div>
+                    </div>
+
+                    <!-- Video Upload Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Edit Product Videos</h4>
+                            <div class="mb-3" id="video-previews" style="display: flex; flex-wrap: wrap; margin-top: 10px;">
+                                <!-- Preload current videos -->
+                                {% for video in product.videos.all %}
+                                    <div style="position: relative; margin-right: 10px;">
+                                        <video src="{{ video.video.url }}" controls style="width: 150px; height: 150px; object-fit: cover;"></video>
+                                        <!-- Remove button for existing video -->
+                                        <button type="button" class="remove-btn" style="position: absolute; top: 5px; right: 5px; background-color: #ff6c2f; color: #fff; border: none; border-radius: 50%; cursor: pointer; padding: 0; width: 24px; height: 24px;">&times;</button>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <input class="form-control mt-3" name="videos" type="file" accept="video/mp4, video/x-m4v, video/*" id="videoUpload" multiple>
+                        </div>
+                    </div>
+
+                    <!-- General Information Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Edit Product Information</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <!-- Product Name -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="product-name" class="form-label">Product Name</label>
+                                        <input type="text" name="name" id="product-name" class="form-control" value="{{ product.name }}" required>
+                                    </div>
+                                </div>
+                                <!-- Category -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="category" class="form-label">Category</label>
+                                        <select name="category_id" class="form-control" id="category" required>
+                                            <option value="">Select Category</option>
+                                            {% for category in categories %}
+                                                <option value="{{ category.id }}" {% if category.id == product.category_id %}selected{% endif %}>{{ category.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Price -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="price" class="form-label">Price</label>
+                                        <input type="number" step="0.01" name="price" id="price" class="form-control" value="{{ product.price }}" required>
+                                    </div>
+                                </div>
+
+                                <!-- Stock -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="stock" class="form-label">Stock</label>
+                                        <input type="number" name="stock" id="stock" class="form-control" value="{{ product.stock }}" required>
+                                    </div>
+                                </div>
+
+                                <!-- Description -->
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
+                                        <label for="description" class="form-label">Description</label>
+                                        <textarea class="form-control bg-light-subtle" name="description" id="description" rows="5" required>{{ product.description }}</textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Status -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="status" class="form-label">Status</label>
+                                        <select name="status" class="form-control" id="status" required>
+                                            <option value="1" {% if product.status == 1 %}selected{% endif %}>Active</option>
+                                            <option value="0" {% if product.status == 0 %}selected{% endif %}>Inactive</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="feature" class="form-label">Feature</label>
+                                        <select name="feature" class="form-control" id="feature" required>
+                                            <option selected value="">Select Feature</option>
+                                            <option value="1" {% if product.feature == 1 %}selected{% endif %}>Related Product</option>
+                                            <option value="2" {% if product.feature == 2 %}selected{% endif %}>Featured Product</option>
+                                            <option value="3" {% if product.feature == 3 %}selected{% endif %}>Popular Product</option>
+                                            <option value="4" {% if product.feature == 4 %}selected{% endif %}>Special Product</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Tags -->
+                                <div class="col-lg-6">
+                                    <label for="product-tags" class="form-label">Tags</label>
+                                    <select class="form-control" id="choices-multiple-remove-button-tags" data-choices data-choices-removeItem name="tags" multiple>
+                                        <option value="" disabled>Select Tags</option>
+                                        {% for tag in tags %}
+                                            <option value="{{ tag.id }}" {% if tag.id in existing_tags %}selected{% endif %}>{{ tag.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <!-- Variants -->
+                                <div class="col-lg-6">
+                                    <label for="product-variants" class="form-label">Variants</label>
+                                    <select class="form-control" id="choices-multiple-remove-button-variants" data-choices data-choices-removeItem name="variants" multiple>
+                                        <option value="" disabled>Select Variants</option>
+                                        {% for variant in variants %}
+                                            <option value="{{ variant.id }}" {% if variant.id in existing_variants %}selected{% endif %}>{{ variant.value }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="p-3 bg-light mb-3 rounded">
+                        <div class="row justify-content-end g-2">
+                            <div class="col-lg-2">
+                                <button type="submit" class="btn btn-outline-secondary w-100">Update</button>
+                            </div>
+                            <div class="col-lg-2">
+                                <a href="{% url 'products_list' %}" class="btn btn-primary w-100">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <script>document.write(new Date().getFullYear())</script> &copy; Aquarium E-Commerce. Developed by 
+                    <iconify-icon icon="iconamoon:heart-duotone" class="fs-18 align-middle text-danger"></iconify-icon> 
+                    <a href="https://geegatechnologies.com/" class="fw-bold footer-text" target="_blank">GeegaTechnologies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script>
+    function handleFileUpload(inputId, previewContainerId, isVideo = false) {
+        const previewsContainer = document.getElementById(previewContainerId);
+        
+        document.getElementById(inputId).addEventListener('change', function(event) {
+            const files = event.target.files;
+
+            // Retain old images/videos before clearing
+            const existingPreviews = previewsContainer.innerHTML;
+
+            // Clear previous previews only for newly uploaded files
+            previewsContainer.innerHTML = existingPreviews; // Keep existing previews
+
+            Array.from(files).forEach((file) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const previewBox = document.createElement('div');
+                    previewBox.style.position = 'relative';
+                    previewBox.style.marginRight = '10px';
+
+                    if (isVideo) {
+                        const videoElement = document.createElement('video');
+                        videoElement.src = e.target.result;
+                        videoElement.controls = true;
+                        videoElement.style.width = '150px';
+                        videoElement.style.height = '150px';
+                        previewBox.appendChild(videoElement);
+                    } else {
+                        const imgElement = document.createElement('img');
+                        imgElement.src = e.target.result;
+                        imgElement.style.width = '150px';
+                        imgElement.style.height = '150px';
+                        imgElement.style.objectFit = 'cover';
+                        imgElement.style.borderRadius = '8px';
+                        previewBox.appendChild(imgElement);
+                    }
+
+                    // Create remove button
+                    const removeButton = document.createElement('button');
+                    removeButton.type = 'button';
+                    removeButton.className = 'remove-btn';
+                    removeButton.innerHTML = '&times;';
+                    removeButton.style.position = 'absolute';
+                    removeButton.style.top = '5px';
+                    removeButton.style.right = '5px';
+                    removeButton.style.backgroundColor = '#ff6c2f';
+                    removeButton.style.color = '#fff';
+                    removeButton.style.border = 'none';
+                    removeButton.style.borderRadius = '50%';
+                    removeButton.style.cursor = 'pointer';
+                    removeButton.style.padding = '0';
+                    removeButton.style.width = '24px';
+                    removeButton.style.height = '24px';
+                    
+                    // Remove the preview when the button is clicked
+                    removeButton.addEventListener('click', function() {
+                        previewBox.remove();
+                    });
+
+                    previewBox.appendChild(removeButton);
+                    previewsContainer.appendChild(previewBox);
+                }
+                reader.readAsDataURL(file);
+            });
+        });
+    }
+
+    handleFileUpload('imageUpload', 'file-previews');
+    handleFileUpload('videoUpload', 'video-previews', true);
+</script>
+{% endblock content %}

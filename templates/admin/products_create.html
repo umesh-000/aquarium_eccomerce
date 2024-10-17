@@ -1,0 +1,268 @@
+{% extends "admin/dashboard.html" %}
+{% load static %}
+
+{% block title %}
+    <title>Admin | Products Create</title>
+{% endblock title %}
+
+{% block content %}
+<div class="page-content">
+    <div class="container-xxl">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12">
+                <form method="post" action="" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <!-- Thumbnail Upload Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Add Thumbnail Photo</h4>
+                            <div class="mb-3" id="file-previews" style="display: flex; flex-wrap: wrap; margin-top: 10px;"></div>
+                            <input class="form-control mt-3" name="images" type="file" accept="image/png, image/jpeg, image/gif" id="imageUpload" required multiple>
+                        </div>
+                    </div>
+
+                    <!-- Video Upload Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Add Product Videos</h4>
+                            <div class="mb-3" id="video-previews" style="display: flex; flex-wrap: wrap; margin-top: 10px;"></div>
+                            <input class="form-control mt-3" name="videos" type="file" accept="video/mp4, video/x-m4v, video/*" id="videoUpload" multiple required>
+                        </div>
+                    </div>
+
+                    <!-- General Information Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Product Information</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <!-- Product Name -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="product-name" class="form-label">Product Name</label>
+                                        <input type="text" name="name" id="product-name" class="form-control" placeholder="Enter Product Name" required>
+                                    </div>
+                                </div>
+                                <!-- Category -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="category" class="form-label">Category</label>
+                                        <select name="category_id" class="form-control" id="category" required>
+                                            <option selected value="">Select Category</option>
+                                            {% for category in categories %}
+                                                <option value="{{ category.id }}">{{ category.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <!-- Price -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="price" class="form-label">Price</label>
+                                        <input type="number" step="0.01" name="price" id="price" class="form-control" placeholder="Enter Price" required>
+                                    </div>
+                                </div>
+
+                                <!-- Stock -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="stock" class="form-label">Stock</label>
+                                        <input type="number" name="stock" id="stock" class="form-control" placeholder="Enter Stock Quantity" required>
+                                    </div>
+                                </div>
+
+                                <!-- Description -->
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
+                                        <label for="description" class="form-label">Description</label>
+                                        <textarea class="form-control bg-light-subtle" name="description" id="description" rows="5" placeholder="Type product description" required></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Status -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="status" class="form-label">Status</label>
+                                        <select name="status" class="form-control" id="status" required>
+                                            <option selected value="">Select Status</option>
+                                            <option value="1">Active</option>
+                                            <option value="0">Inactive</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- feature -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="feature" class="form-label">Feature</label>
+                                        <select name="feature" class="form-control" id="feature" required>
+                                            <option selected value="">Select Feature</option>
+                                            <option value="1">Related Product</option>
+                                            <option value="2">Featured Product</option>
+                                            <option value="3">Popular Product</option>
+                                            <option value="4">Special Product</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Tags -->
+                                <div class="col-lg-6">
+                                    <label for="product-stock" class="form-label">Tags</label>
+                                    <select class="form-control" id="choices-multiple-remove-button" data-choices data-choices-removeItem name="tags" multiple>
+
+                                        <option value="" disabled>Select Tags</option>
+                                        {% for tag in tags %}
+                                            <option value="{{ tag.id }}">{{ tag.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                               <!-- Variants -->
+                               <div class="col-lg-6">
+                                    <label for="product-stock" class="form-label">Variants</label>
+                                    <select class="form-control" name="variants" id="choices-multiple-remove-button" data-choices data-choices-removeItem name="choices-multiple-remove-button" multiple>
+                                        <option value="" disabled>Select Variants</option>
+                                        {% for variant in variants %}
+                                            <option value="{{ variant.id }}">{{ variant.value }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="p-3 bg-light mb-3 rounded">
+                        <div class="row justify-content-end g-2">
+                            <div class="col-lg-2">
+                                <button type="submit" class="btn btn-outline-secondary w-100">Create</button>
+                            </div>
+                            <div class="col-lg-2">
+                                <a href="{% url 'products_list' %}" class="btn btn-primary w-100">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <script>document.write(new Date().getFullYear())</script> &copy; Aquarium E-Commerce. Developed by 
+                    <iconify-icon icon="iconamoon:heart-duotone" class="fs-18 align-middle text-danger"></iconify-icon> 
+                    <a href="https://geegatechnologies.com/" class="fw-bold footer-text" target="_blank">GeegaTechnologies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script>
+    function handleFileUpload(inputId, previewContainerId, isVideo = false) 
+    {
+        document.getElementById(inputId).addEventListener('change', function(event) {
+            const files = event.target.files;
+            const previewsContainer = document.getElementById(previewContainerId);
+            previewsContainer.innerHTML = ''; // Clear previous previews
+
+            Array.from(files).forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const previewBox = document.createElement('div');
+                    previewBox.style.position = 'relative';
+                    previewBox.style.marginRight = '10px'; // Space between previews
+                    previewBox.style.width = '150px'; // Set desired width
+                    previewBox.style.height = '150px'; // Set desired height
+                    previewBox.style.overflow = 'hidden'; // Hide overflow
+                    previewBox.style.borderRadius = '8px'; // Optional: add border radius
+                    previewBox.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)'; // Optional: add shadow
+
+                    if (isVideo) {
+                        const video = document.createElement('video');
+                        video.src = e.target.result;
+                        video.style.width = '100%';
+                        video.style.height = '100%';
+                        video.style.objectFit = 'cover'; // Cover the box area
+                        video.controls = true; // Show video controls
+                        previewBox.appendChild(video);
+                    } else {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.style.width = '100%'; // Fill the box width
+                        img.style.height = '100%'; // Fill the box height
+                        img.style.objectFit = 'cover'; // Cover the box area
+                        img.style.borderRadius = '8px'; // Optional: add border radius to the image
+
+                        // Click event to show the full image preview
+                        img.addEventListener('click', function() {
+                            document.getElementById('fullImage').src = e.target.result;
+                            document.getElementById('fullImagePreview').style.display = 'flex'; // Show full image preview
+                        });
+
+                        previewBox.appendChild(img);
+                    }
+
+                    // Remove button
+                    const removeButton = document.createElement('button');
+                    removeButton.innerText = 'X';
+                    removeButton.style.position = 'absolute';
+                    removeButton.style.top = '5px';
+                    removeButton.style.right = '5px';
+                    removeButton.style.backgroundColor = '#ff6c2f';
+                    removeButton.style.color = '#fff';
+                    removeButton.style.border = 'none';
+                    removeButton.style.borderRadius = '50%';
+                    removeButton.style.cursor = 'pointer';
+                    removeButton.addEventListener('click', function() {
+                        previewBox.remove();
+                    });
+
+                    previewBox.appendChild(removeButton);
+                    previewsContainer.appendChild(previewBox);
+                }
+                reader.readAsDataURL(file);
+            });
+        });
+    }
+
+    // Initialize file upload handling
+    handleFileUpload('imageUpload', 'file-previews', false); // For images
+    handleFileUpload('videoUpload', 'video-previews', true); // For videos
+
+    // Full image preview functionality
+    const fullImagePreview = document.createElement('div');
+    fullImagePreview.style.position = 'fixed';
+    fullImagePreview.style.top = '0';
+    fullImagePreview.style.left = '0';
+    fullImagePreview.style.width = '100%';
+    fullImagePreview.style.height = '100%';
+    fullImagePreview.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+    fullImagePreview.style.display = 'none';
+    fullImagePreview.style.justifyContent = 'center';
+    fullImagePreview.style.alignItems = 'center';
+    fullImagePreview.style.zIndex = '1000';
+
+    const fullImage = document.createElement('img');
+    fullImage.style.maxWidth = '100%';
+    fullImage.style.maxHeight = '100%';
+    fullImage.style.objectFit = 'contain';
+
+    fullImagePreview.appendChild(fullImage);
+    document.body.appendChild(fullImagePreview);
+
+    fullImagePreview.addEventListener('click', function() {
+        fullImagePreview.style.display = 'none'; // Hide on click
+    });
+
+    function showFullImage(event) {
+        fullImage.src = event.target.src;
+        fullImagePreview.style.display = 'flex'; // Show full image preview
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,192 @@
+{% extends "admin/dashboard.html" %}
+{% load static %}
+
+{% block title %}
+    <title>Admin | Edit Banner</title>
+{% endblock title %}
+
+{% block content %}
+<style>
+    /* Custom styles for SweetAlert */
+    .swal2-popup {
+        width: 350px; /* Adjust the width of the alert */
+        font-size: 10px; /* Adjust the font size */
+    }
+
+    .swal2-confirm,
+    .swal2-cancel {
+        padding: 8px 12px; /* Decrease button size */
+        font-size: 12px; /* Decrease font size */
+    }
+
+    /* Decrease icon size */
+    .swal2-icon {
+        font-size: 10px; /* Adjust icon size as needed */
+    }
+</style>
+
+<div class="page-content">
+    <div class="container-xxl">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12">
+                <form method="post" action="" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <!-- Thumbnail Upload Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Edit Thumbnail Photo</h4>
+                            <div class="mb-3" id="file-previews" style="display: flex; flex-wrap: wrap; margin-top: 10px;">
+                                {% if banner.image %} <!-- Check if an image exists -->
+                                    <div class="preview-box">
+                                        <img src="{{ banner.image.url }}" alt="Current Image" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; margin-right: 10px;">
+                                        <button type="button" class="btn btn-danger btn-sm remove-preview" style="margin-top: -60px; margin-left: -50px; font-weight: bold;"> X</button>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <input class="form-control mt-3" name="image" type="file" accept="image/png, image/jpeg, image/gif" id="imageUpload" {% if not banner.image %}required{% endif %}>
+                        </div>
+                    </div>
+
+                    <!-- General Information Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">General Information</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <!-- Banner Title -->
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
+                                        <label for="banner-title" class="form-label">Banner Title</label>
+                                        <input type="text" name="title" id="title" class="form-control" placeholder="Enter Title" value="{{ banner.title }}" required>
+                                    </div>
+                                </div>
+
+                                <!-- Subtitle -->
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
+                                        <label for="subtitle" class="form-label">Subtitle</label>
+                                        <input type="text" name="subtitle" id="subtitle" class="form-control" placeholder="Enter Subtitle" value="{{ banner.subtitle }}" required>
+                                    </div>
+                                </div>
+
+                                <!-- Button Text -->
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
+                                        <label for="button_text" class="form-label">Button Text</label>
+                                        <input type="text" name="button_text" id="button_text" class="form-control" placeholder="Enter Button Text" value="{{ banner.button_text }}" required>
+                                    </div>
+                                </div>
+
+                                <!-- Button Link -->
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
+                                        <label for="button_link" class="form-label">Button Link</label>
+                                        <input type="text" name="button_link" id="button_link" class="form-control" placeholder="Enter Button Link" value="{{ banner.button_link }}" required>
+                                    </div>
+                                </div>
+
+                                <!-- Order -->
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
+                                        <label for="order" class="form-label">Order</label>
+                                        <input type="number" name="order" id="order" class="form-control" placeholder="Enter Display Order" value="{{ banner.order }}" required>
+                                    </div>
+                                </div>
+
+                                <!-- Status -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="is_active" class="form-label">Status</label>
+                                        <div class="form-check form-switch">
+                                            <input type="checkbox" name="is_active" class="form-check-input" id="is_active" {% if banner.is_active %}checked{% endif %}>
+                                            <label class="form-check-label" for="is_active">Active</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="p-3 bg-light mb-3 rounded">
+                        <div class="row justify-content-end g-2">
+                            <div class="col-lg-2">
+                                <button type="submit" class="btn btn-outline-secondary w-100">Update</button>
+                            </div>
+                            <div class="col-lg-2">
+                                <a href="{% url 'banners_list' %}" class="btn btn-primary w-100">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <script>document.write(new Date().getFullYear())</script> &copy; Aquarium E-Commerce. Developed by 
+                    <iconify-icon icon="iconamoon:heart-duotone" class="fs-18 align-middle text-danger"></iconify-icon> 
+                    <a href="https://geegatechnologies.com/" class="fw-bold footer-text" target="_blank">GeegaTechnologies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<!-- JavaScript for triggering the file input and previewing images -->
+<script>
+    document.getElementById('imageUpload').addEventListener('change', function(event) {
+        const files = event.target.files;
+        const previewsContainer = document.getElementById('file-previews');
+        previewsContainer.innerHTML = ''; // Clear previous previews
+
+        // If no files are selected, hide the full image preview
+        if (files.length === 0) {
+            return;
+        }
+
+        // Create a preview for the new image
+        Array.from(files).forEach((file) => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const previewBox = document.createElement('div');
+                previewBox.className = 'preview-box';
+                previewBox.style.position = 'relative';
+                previewBox.style.marginRight = '10px'; // Space between previews
+
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.width = '100px';
+                img.style.height = '100px';
+                img.style.objectFit = 'cover';
+                img.style.borderRadius = '8px'; // Rounded corners
+
+                const removeButton = document.createElement('button');
+                removeButton.type = 'button';
+                removeButton.className = 'btn btn-danger btn-sm remove-preview';
+                removeButton.innerText = 'X';
+                removeButton.style.position = 'absolute';
+                removeButton.style.top = '5px';
+                removeButton.style.right = '5px';
+                removeButton.style.fontWeight = 'bold';
+
+                removeButton.onclick = function() {
+                    previewsContainer.innerHTML = ''; // Clear the preview on click
+                    document.getElementById('imageUpload').value = ''; // Clear the input value
+                };
+
+                previewBox.appendChild(img);
+                previewBox.appendChild(removeButton);
+                previewsContainer.appendChild(previewBox);
+            };
+
+            reader.readAsDataURL(file);
+        });
+    });
+</script>
+{% endblock %}

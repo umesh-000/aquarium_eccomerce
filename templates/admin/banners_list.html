@@ -1,0 +1,233 @@
+{% extends "admin/dashboard.html" %}
+{% load static %}
+
+{% block title %}
+    <title>Admin | Banner List</title>
+{% endblock title %}
+
+{% block content %}
+<style>
+    /* Custom styles for SweetAlert */
+    .swal2-popup {
+        width: 350px;
+        font-size: 10px;
+    }
+
+    .swal2-confirm,
+    .swal2-cancel {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+
+    .swal2-icon {
+        font-size: 10px;
+    }
+</style>
+
+<div class="page-content">
+    <div class="container-xxl">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center gap-1">
+                        <h4 class="card-title flex-grow-1">All Banner List</h4>
+                        <a href="{% url 'banner_create' %}" class="btn btn-sm btn-primary">Add Banner</a>
+                    </div>
+                    <div>
+                        <div class="table-responsive">
+                            <table class="table align-middle mb-0 table-hover table-centered">
+                                <thead class="bg-light-subtle">
+                                    <tr>
+                                        <th style="width: 20px;">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="customCheck1">
+                                                <label class="form-check-label" for="customCheck1"></label>
+                                            </div>
+                                        </th>
+                                        <th>ID</th>
+                                        <th>Banner Image</th>
+                                        <th>Banner Title</th>
+                                        <th>Subtitle</th>
+                                        <th>Status</th>
+                                        <th>Order</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for banner in banners %}
+                                    <tr>
+                                        <td>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="customCheck2">
+                                                <label class="form-check-label" for="customCheck2"></label>
+                                            </div>
+                                        </td>
+                                        <td>{{ banner.id }}</td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="rounded bg-light avatar-md d-flex align-items-center ">
+                                                    <img src="{{ banner.image.url }}" alt="Banner Image" class="avatar-md" style="width: 100px; height:70px; border-radius: 10px;">
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>{{ banner.title }}</td>
+                                        <td>{{ banner.subtitle }}</td>
+                                        <td>
+                                            {% if banner.is_active %}
+                                                <span class="badge bg-success">Active</span>
+                                            {% else %}
+                                                <span class="badge bg-danger">Inactive</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ banner.order }}</td>
+                                        <td>
+                                            <div class="d-flex gap-2">
+                                                <a href="{% url 'banner_edit' banner.id %}" class="btn btn-soft-primary btn-sm">
+                                                    <iconify-icon icon="solar:pen-2-broken" class="align-middle fs-18"></iconify-icon>
+                                                </a>
+                                                <a href="javascript:void(0);" class="btn btn-soft-danger btn-sm delete-button" data-url="{% url 'banner_delete' banner.id %}">
+                                                    <iconify-icon icon="solar:trash-bin-minimalistic-2-broken" class="align-middle fs-18"></iconify-icon>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="8" class="text-center text-warning fw-bold p-5">No banners available</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer border-top">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-end mb-0">
+                                {% if banners.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ banners.previous_page_number }}">Previous</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#">Previous</a>
+                                    </li>
+                                {% endif %}
+
+                                {% for page_num in banners.paginator.page_range %}
+                                    {% if banners.number == page_num %}
+                                        <li class="page-item active">
+                                            <a class="page-link" href="#">{{ page_num }}</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if banners.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ banners.next_page_number }}">Next</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#">Next</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <script>document.write(new Date().getFullYear())</script> &copy; Aquarium E-Commerce. Developed by 
+                    <iconify-icon icon="iconamoon:heart-duotone" class="fs-18 align-middle text-danger"></iconify-icon> 
+                    <a href="https://geegatechnologies.com/" class="fw-bold footer-text" target="_blank">GeegaTechnologies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script>
+    // Get CSRF token from meta tag
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    // Target all elements with the class 'delete-button'
+    document.querySelectorAll(".delete-button").forEach(function (button) {
+        button.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            let deleteUrl = this.getAttribute('data-url');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, cancel!',
+                confirmButtonClass: 'btn btn-primary w-xs me-2 mt-2',
+                cancelButtonClass: 'btn btn-danger w-xs mt-2',
+                buttonsStyling: false
+            }).then(function (result) {
+                if (result.value) {
+                    fetch(deleteUrl, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': csrfToken,
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: 'Deleted!',
+                                text: 'The banner has been deleted.',
+                                icon: 'success',
+                                confirmButtonClass: 'btn btn-primary w-xs mt-2',
+                                buttonsStyling: false
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: data.message,
+                                icon: 'error',
+                                confirmButtonClass: 'btn btn-primary w-xs mt-2',
+                                buttonsStyling: false
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'An error occurred while deleting the banner.',
+                            icon: 'error',
+                            confirmButtonClass: 'btn btn-primary w-xs mt-2',
+                            buttonsStyling: false
+                        });
+                    });
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    Swal.fire({
+                        title: 'Cancelled',
+                        text: 'Your banner is safe :)',
+                        icon: 'error',
+                        confirmButtonClass: 'btn btn-primary mt-2',
+                        buttonsStyling: false
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock content %}

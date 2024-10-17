@@ -1,0 +1,331 @@
+{% extends "admin/dashboard.html" %}
+{% load static %}
+
+{% block title %}
+    <title>Admin | Customer List</title>
+{% endblock title %}
+
+{% block content %}
+<style>
+    /* Custom styles for SweetAlert */
+    .swal2-popup {
+        width: 350px; /* Adjust the width of the alert */
+        font-size: 10px; /* Adjust the font size */
+    }
+
+    .swal2-confirm,
+    .swal2-cancel {
+        padding: 8px 12px; /* Decrease button size */
+        font-size: 12px; /* Decrease font size */
+    }
+
+    /* Decrease icon size */
+    .swal2-icon {
+        font-size: 10px; /* Adjust icon size as needed */
+    }
+</style>
+<div class="wrapper">
+    <div class="page-content">
+        <div class="container-xxl">
+
+            <!-- Customer Stats Section (Top) -->
+            <div class="row">
+                <div class="col-md-6 col-xl-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <div class="avatar-md bg-primary bg-opacity-10 rounded">
+                                    <iconify-icon icon="solar:users-group-two-rounded-bold-duotone" class="fs-32 text-primary avatar-title"></iconify-icon>
+                                </div>
+                                <div>
+                                    <h4 class="mb-0">Customers</h4>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <p class="text-muted fw-medium fs-22 mb-0">+{{ customers.paginator.count }}</p>
+                                <div>
+                                    <span class="badge text-success bg-success-subtle fs-12"><i class="bx bx-down-arrow-alt"></i>8.1%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-3">
+                    <div class="card">
+                        <div class="card-body">                                
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <div class="avatar-md bg-primary bg-opacity-10 rounded">
+                                    <iconify-icon icon="solar:box-bold-duotone" class="fs-32 text-primary avatar-title"></iconify-icon>
+                                </div>
+                                <div>
+                                    <h4 class="mb-0">Orders</h4>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <p class="text-muted fw-medium fs-22 mb-0">+4.5k</p>            
+                                <div>
+                                    <span class="badge text-danger bg-danger-subtle fs-12"><i class="bx bx-down-arrow-alt"></i>8.1%</span>
+                                </div>        
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-3">
+                    <div class="card">
+                        <div class="card-body">                                
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <div class="avatar-md bg-primary bg-opacity-10 rounded">
+                                    <iconify-icon icon="solar:headphones-round-sound-bold-duotone" class="fs-32 text-primary avatar-title"></iconify-icon>
+                                </div>
+                                <div>
+                                    <h4 class="mb-0">Services Request</h4>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <p class="text-muted fw-medium fs-22 mb-0">+1.03k</p>            
+                                <div>
+                                    <span class="badge text-success bg-success-subtle fs-12"><i class="bx bx-up-arrow-alt"></i>12.6%</span>
+                                </div>        
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xl-3">
+                    <div class="card">
+                        <div class="card-body">                                
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <div class="avatar-md bg-primary bg-opacity-10 rounded">
+                                    <iconify-icon icon="solar:bill-list-bold-duotone" class="fs-32 text-primary avatar-title"></iconify-icon>
+                                </div>
+                                <div>
+                                    <h4 class="mb-0">Invoice & Payment</h4>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <p class="text-muted fw-medium fs-22 mb-0">$38,908.00</p>            
+                                <div>
+                                    <span class="badge text-success bg-success-subtle fs-12"><i class="bx bx-up-arrow-alt"></i>45.9%</span>
+                                </div>        
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer List Table -->
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="d-flex card-header justify-content-between align-items-center">
+                            <h4 class="card-title">All Customers List</h4>
+                            <a href="{% url 'customers_create' %}" class="btn btn-sm btn-primary"> Add Customer </a>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table align-middle mb-0 table-hover table-centered">
+                                <thead class="bg-light-subtle">
+                                    <tr>
+                                        <th style="width: 20px;">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="selectAllCheckbox">
+                                            </div>
+                                        </th>
+                                        <th>Customer Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Joined Date</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for customer in customers %}
+                                    <tr>
+                                        <td>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="customCheck{{ forloop.counter }}">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            {% if customer.profile_image %}
+                                                <img src="{{ customer.profile_image.url }}" class="avatar-sm rounded-circle me-2" alt="Customer Image">
+                                            {% else %}
+                                                <img src="{% static 'assets/images/users/default_avatar.png' %}" class="avatar-sm rounded-circle me-2" alt="Default Avatar">
+                                            {% endif %}
+                                            {{ customer.user.first_name }} {{ customer.user.last_name }}  <!-- Accessing the user details -->
+                                        </td>
+                                        <td>{{ customer.user.email }}</td>
+                                        <td>{{ customer.phone_number }}</td>
+                                        <td>{{ customer.create_at|date:"d M, Y" }}</td>
+                                        <td>
+                                            {% if customer.status %}
+                                                <span class="badge bg-success">
+                                                    Active
+                                                </span>
+                                            {% else %}
+                                                <span class="badge bg-danger">
+                                                    Inactive
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="d-flex gap-2">
+                                                <a href="{% url 'customers_edit' customer.id %}" class="btn btn-soft-primary btn-sm">
+                                                    <iconify-icon icon="solar:pen-2-broken" class="align-middle fs-18"></iconify-icon>
+                                                </a>
+                                                <a href="javascript:void(0);" class="btn btn-soft-danger btn-sm delete-button" data-url="{% url 'customers_delete' customer.id %}">
+                                                    <iconify-icon icon="solar:trash-bin-minimalistic-2-broken" class="align-middle fs-18"></iconify-icon>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td colspan="8" class="text-center text-warning fw-bold p-5">No products available.</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Pagination -->
+                        <div class="card-footer border-top">
+                            <!-- Pagination Controls -->
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination justify-content-end mb-0">
+                                    {% if customers.has_previous %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ customers.previous_page_number }}">Previous</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#">Previous</a>
+                                        </li>
+                                    {% endif %}
+                        
+                                    {% for page_num in customers.paginator.page_range %}
+                                        {% if customers.number == page_num %}
+                                            <li class="page-item active">
+                                                <a class="page-link" href="#">{{ page_num }}</a>
+                                            </li>
+                                        {% else %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                        
+                                    {% if customers.has_next %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ customers.next_page_number }}">Next</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#">Next</a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <footer class="footer">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <script>document.write(new Date().getFullYear())</script> &copy; Aquarium E-Commerce. Developed by 
+                        <iconify-icon icon="iconamoon:heart-duotone" class="fs-18 align-middle text-danger"></iconify-icon> 
+                        <a href="https://geegatechnologies.com/" class="fw-bold footer-text" target="_blank">GeegaTechnologies</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+
+<script>
+    // Get CSRF token from meta tag
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        // Target all elements with the class 'delete-button'
+        document.querySelectorAll(".delete-button").forEach(function (button) {
+            button.addEventListener("click", function (event) {
+                event.preventDefault(); // Prevent the link's default action
+    
+                let deleteUrl = this.getAttribute('data-url'); // Get the delete URL from the data attribute
+    
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonClass: 'btn btn-primary w-xs me-2 mt-2',
+                    cancelButtonClass: 'btn btn-danger w-xs mt-2',
+                    buttonsStyling: false,
+                    showCloseButton: false,
+                    customClass: {
+                        popup: 'swal2-popup', // Adding custom class for popup
+                        confirmButton: 'swal2-confirm', // Adding custom class for confirm button
+                        cancelButton: 'swal2-cancel' // Adding custom class for cancel button
+                    }
+                }).then(function (result) {
+                    if (result.value) {
+                        // Perform an AJAX request to delete the item
+                        fetch(deleteUrl, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': csrfToken, // Include CSRF token
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire({
+                                    title: 'Deleted!',
+                                    text: 'Your file has been deleted.',
+                                    icon: 'success',
+                                    confirmButtonClass: 'btn btn-primary w-xs mt-2',
+                                    buttonsStyling: false
+                                }).then(() => {
+                                    // Reload the page to reflect the deletion
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: data.message,
+                                    icon: 'error',
+                                    confirmButtonClass: 'btn btn-primary w-xs mt-2',
+                                    buttonsStyling: false
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'An error occurred while deleting the file.',
+                                icon: 'error',
+                                confirmButtonClass: 'btn btn-primary w-xs mt-2',
+                                buttonsStyling: false
+                            });
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        Swal.fire({
+                            title: 'Cancelled',
+                            text: 'Your file is safe :)',
+                            icon: 'error',
+                            confirmButtonClass: 'btn btn-primary mt-2',
+                            buttonsStyling: false
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock content %}

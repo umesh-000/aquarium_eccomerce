@@ -30,6 +30,14 @@
 
                     <div class="d-flex align-items-center gap-1">
 
+                         <!-- App Search-->
+                         <form class="app-search d-none d-md-block ms-2">
+                              <div class="position-relative">
+                                   <input type="search" class="form-control" placeholder="Search..." autocomplete="off" value="">
+                                   <iconify-icon icon="solar:magnifer-linear" class="search-widget-icon"></iconify-icon>
+                              </div>
+                         </form>
+
                          <!-- Theme Color (Light/Dark) -->
                          <div class="topbar-item">
                               <button type="button" class="topbar-button" id="light-dark-mode">
@@ -99,33 +107,24 @@
                                    <iconify-icon icon="solar:settings-bold-duotone" class="fs-24 align-middle"></iconify-icon>
                               </button>
                          </div>
+                         
                          <!-- User -->
                          <div class="dropdown topbar-item">
                               <a type="button" class="topbar-button" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                    <span class="d-flex align-items-center">
-                                        <img class="rounded-circle" width="32" src="{% static '/assets/images/users/avatar-1.jpg' %}" alt="avatar-3">
+                                       {% if admin_profile.user.profile_image %}
+                                           <img class="rounded-circle" width="32" src="{{ admin_profile.user.profile_image.url }}" alt="User Image">
+                                       {% else %}
+                                           <img class="rounded-circle" width="32" src="{% static 'assets/images/users/default_avatar.png' %}" alt="Default Image">
+                                       {% endif %}
                                    </span>
-                              </a>
+                               </a>
                               <div class="dropdown-menu dropdown-menu-end">
                                    <!-- item-->
                                    <h6 class="dropdown-header">Welcome <p  class="fw-bold footer-text">{{ admin_user.username}}</p></h6>
-                                   <a class="dropdown-item" href="pages-profile.html">
+                                   <a class="dropdown-item" href="{% url 'admin_profile_details' admin_user.id %}">
                                         <i class="bx bx-user-circle text-muted fs-18 align-middle me-1"></i><span class="align-middle">Profile</span>
                                    </a>
-                                   <a class="dropdown-item" href="apps-chat.html">
-                                        <i class="bx bx-message-dots text-muted fs-18 align-middle me-1"></i><span class="align-middle">Messages</span>
-                                   </a>
-
-                                   <a class="dropdown-item" href="pages-pricing.html">
-                                        <i class="bx bx-wallet text-muted fs-18 align-middle me-1"></i><span class="align-middle">Pricing</span>
-                                   </a>
-                                   <a class="dropdown-item" href="pages-faqs.html">
-                                        <i class="bx bx-help-circle text-muted fs-18 align-middle me-1"></i><span class="align-middle">Help</span>
-                                   </a>
-                                   <a class="dropdown-item" href="auth-lock-screen.html">
-                                        <i class="bx bx-lock text-muted fs-18 align-middle me-1"></i><span class="align-middle">Lock screen</span>
-                                   </a>
-
                                    <div class="dropdown-divider my-1"></div>
 
                                    <a class="dropdown-item text-danger" href="{% url 'logout' %}">
@@ -133,14 +132,6 @@
                                    </a>
                               </div>
                          </div>
-
-                         <!-- App Search-->
-                         <form class="app-search d-none d-md-block ms-2">
-                              <div class="position-relative">
-                                   <input type="search" class="form-control" placeholder="Search..." autocomplete="off" value="">
-                                   <iconify-icon icon="solar:magnifer-linear" class="search-widget-icon"></iconify-icon>
-                              </div>
-                         </form>
                     </div>
                </div>
           </div>
@@ -308,42 +299,44 @@
                                    <li class="sub-nav-item">
                                         <a class="sub-nav-link" href="{% url 'categories_list' %}">Categories</a>
                                    </li>
+
+                                   <li class="sub-nav-item">
+                                        <a class="sub-nav-link" href="{% url 'products_list' %}">Products</a>
+                                   </li>
                               </ul>
                          </div>
                     </li>
 
-
-                    <li class="menu-title mt-2">Users</li>
-
                     <li class="nav-item">
-                         <a class="nav-link" href="pages-profile.html">
+                         <a class="nav-link menu-arrow" href="#sidebarCustomers" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCustomers">
                               <span class="nav-icon">
-                                   <iconify-icon icon="solar:chat-square-like-bold-duotone"></iconify-icon>
+                                   <iconify-icon icon="solar:users-group-two-rounded-bold-duotone"></iconify-icon>
                               </span>
-                              <span class="nav-text"> Profile </span>
+                              <span class="nav-text"> Customers</span>
                          </a>
-                    </li>
-
-                    <li class="nav-item">
-                         <a class="nav-link menu-arrow" href="#sidebarRoles" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarRoles">
-                              <span class="nav-icon">
-                                   <iconify-icon icon="solar:user-speak-rounded-bold-duotone"></iconify-icon>
-                              </span>
-                              <span class="nav-text"> Roles </span>
-                         </a>
-                         <div class="collapse" id="sidebarRoles">
+                         <div class="collapse" id="sidebarCustomers">
                               <ul class="nav sub-navbar-nav">
-                                   <ul class="nav sub-navbar-nav">
-                                        <li class="sub-nav-item">
-                                             <a class="sub-nav-link" href="role-list.html">List</a>
-                                        </li>
-                                        <li class="sub-nav-item">
-                                             <a class="sub-nav-link" href="role-edit.html">Edit</a>
-                                        </li>
-                                   </ul>
+
+                                   <li class="sub-nav-item">
+                                        <a class="sub-nav-link" href="{% url 'customers_list' %}">Customers Info</a>
+                                   </li>
+                                   <li class="sub-nav-item">
+                                        <a class="sub-nav-link" href="customer-detail.html">Reviews/Feedback</a>
+                                   </li>
                               </ul>
                          </div>
                     </li>
+
+                    <li class="menu-title mt-2">Website Sections</li>
+
+                    <li class="nav-item">
+                         <a class="nav-link" href="{% url 'banners_list' %}">
+                             <span class="nav-icon">
+                                 <iconify-icon icon="mdi:image-area"></iconify-icon> <!-- Example banner icon -->
+                             </span>
+                             <span class="nav-text">Banners</span>
+                         </a>
+                     </li>
 
 
                     <li class="menu-title mt-2">Other</li>

@@ -1,0 +1,138 @@
+{% extends "admin/dashboard.html" %}
+{% load static %}
+
+{% block title %}
+    <title>Admin | Banner Create</title>
+{% endblock title %}
+
+{% block content %}
+<div class="page-content">
+    <div class="container-xxl">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12">
+                <form method="post" action="" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <!-- Banner Image Upload Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Add Banner Image</h4>
+                            <div class="mb-3" id="file-previews" style="display: flex; flex-wrap: wrap; margin-top: 10px;"></div>
+                            <input class="form-control mt-3" name="image" type="file" accept="image/png, image/jpeg" id="imageUpload" required>
+                        </div>
+                    </div>
+                    
+                    <!-- General Information Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Banner Information</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <!-- Title -->
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
+                                        <label for="title" class="form-label">Banner Title</label>
+                                        <input type="text" name="title" id="title" class="form-control" placeholder="Enter Title" required>
+                                    </div>
+                                </div>
+
+                                <!-- Subtitle -->
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
+                                        <label for="subtitle" class="form-label">Subtitle</label>
+                                        <input type="text" name="subtitle" id="subtitle" class="form-control" placeholder="Enter Subtitle">
+                                    </div>
+                                </div>
+
+                                <!-- Button Text -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="button_text" class="form-label">Button Text</label>
+                                        <input type="text" name="button_text" id="button_text" class="form-control" placeholder="Enter Button Text">
+                                    </div>
+                                </div>
+
+                                <!-- Button Link -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="button_link" class="form-label">Button Link</label>
+                                        <input type="text" name="button_link" id="button_link" class="form-control" placeholder="Enter Button Link">
+                                    </div>
+                                </div>
+
+                                <!-- Order -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="order" class="form-label">Order</label>
+                                        <input type="number" name="order" id="order" class="form-control" placeholder="Enter Display Order" required>
+                                    </div>
+                                </div>
+
+                                <!-- Status -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="is_active" class="form-label">Status</label>
+                                        <div class="form-check form-switch">
+                                            <input type="checkbox" name="is_active" class="form-check-input" id="is_active">
+                                            <label class="form-check-label" for="is_active">Active</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="p-3 bg-light mb-3 rounded">
+                        <div class="row justify-content-end g-2">
+                            <div class="col-lg-2">
+                                <button type="submit" class="btn btn-outline-secondary w-100">Create</button>
+                            </div>
+                            <div class="col-lg-2">
+                                <a href="{% url 'banners_list' %}" class="btn btn-primary w-100">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <script>document.write(new Date().getFullYear())</script> &copy; Banner Management. Developed by Geega Technologies.
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<!-- JavaScript for triggering the file input and previewing images -->
+<script>
+    document.getElementById('imageUpload').addEventListener('change', function(event) {
+        const files = event.target.files;
+        const previewsContainer = document.getElementById('file-previews');
+        previewsContainer.innerHTML = ''; // Clear previous previews
+
+        if (files.length === 0) {
+            return;
+        }
+
+        Array.from(files).forEach((file) => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.width = '100px';
+                img.style.height = '100px';
+                img.style.marginRight = '10px';
+                previewsContainer.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+</script>
+{% endblock content %}
