@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
+from django.views.decorators.cache import cache_control
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import get_user_model
@@ -18,6 +19,7 @@ logger = logging.getLogger(__name__)
 
 User = get_user_model()  # Get the custom user model
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def admin_dashboard(request):
     # Check if the user session exists (handled by middleware)
     if not request.admin_user:
@@ -28,6 +30,7 @@ def admin_dashboard(request):
     }
     return render(request, 'admin/dashboard.html',context)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def admin_profile_details(request, id):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -40,6 +43,7 @@ def admin_profile_details(request, id):
     }
     return render(request, 'admin/admin_profile.html',context)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def admin_change_password(request, id):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -78,7 +82,7 @@ def admin_change_password(request, id):
     return render(request, 'admin/admin_profile.html', context)
 
 
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def parent_categories(request):
     if not request.admin_user:
         return redirect('login')
@@ -94,6 +98,7 @@ def parent_categories(request):
     
     return render(request, 'admin/parent_categories_list.html', context)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def parent_categories_create(request):
     if not request.admin_user:
         return redirect('login')
@@ -123,6 +128,7 @@ def parent_categories_create(request):
     }
     return render(request, 'admin/parent_categories_create.html', context)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def parent_categories_edit(request, id):
     if not request.admin_user:
         return redirect('login')
@@ -149,6 +155,7 @@ def parent_categories_edit(request, id):
     }
     return render(request, 'admin/parent_categories_edit.html', context)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def parent_categories_delete(request, id):
     if request.method == 'POST':
         try:
@@ -162,7 +169,7 @@ def parent_categories_delete(request, id):
     return JsonResponse({'success': False, 'message': 'Invalid request method.'})
 
 
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def categories(request):
     if not request.admin_user:
         return redirect('login')
@@ -178,6 +185,7 @@ def categories(request):
     
     return render(request, 'admin/categories_list.html', context)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def categories_create(request):
     if not request.admin_user:
         return redirect('login')
@@ -210,6 +218,7 @@ def categories_create(request):
     }
     return render(request, 'admin/categories_create.html', context)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def categories_edit(request, id):
     if not request.admin_user:
         return redirect('login')
@@ -241,6 +250,7 @@ def categories_edit(request, id):
     }
     return render(request, 'admin/categories_edit.html', context)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def categories_delete(request, id):
     if request.method == 'POST':
         try:
@@ -254,7 +264,7 @@ def categories_delete(request, id):
     return JsonResponse({'success': False, 'message': 'Invalid request method.'})
 
 
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def products_list(request):
     if not request.admin_user:
         return redirect('login')
@@ -270,6 +280,7 @@ def products_list(request):
     }
     return render(request, 'admin/products_list.html', context)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def products_create(request):
     if not request.admin_user:
         return redirect('login')
@@ -338,6 +349,7 @@ def products_create(request):
     }
     return render(request, 'admin/products_create.html', context)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def products_edit(request, id):
     if not request.admin_user:
         return redirect('login')
@@ -414,6 +426,7 @@ def products_edit(request, id):
     }
     return render(request, 'admin/products_edit.html', context)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def products_delete(request, id):
     if request.method == 'POST':
         try:
@@ -427,7 +440,7 @@ def products_delete(request, id):
     return JsonResponse({'success': False, 'message': 'Invalid request method.'})
 
 
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def customers_list(request):
     if not request.user.is_authenticated or request.user.user_type != 'admin':
         return redirect('login')
@@ -442,6 +455,7 @@ def customers_list(request):
     }
     return render(request, 'admin/customers_list.html', context)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def customers_create(request):
     if request.method == 'POST':
         # Extracting data from the form
@@ -518,6 +532,7 @@ def customers_create(request):
     }
     return render(request, 'admin/customers_create.html', context)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def customers_edit(request, id):
     customer = get_object_or_404(account_models.Customer, id=id)
     user = customer.user
@@ -596,6 +611,7 @@ def customers_edit(request, id):
     }
     return render(request, 'admin/customers_edit.html', context)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def customers_delete(request, id):
     if request.method == 'POST':
         if request.user.user_type != 'admin':
@@ -615,7 +631,7 @@ def customers_delete(request, id):
     return JsonResponse({'success': False, 'message': 'Invalid request method.'}, status=405)
 
 
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def banners_list(request):
     if not request.user.is_authenticated or request.user.user_type != 'admin':
         return redirect('login')
@@ -631,6 +647,7 @@ def banners_list(request):
     }
     return render(request, 'admin/banners_list.html', context)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def banner_create(request):
     if not request.admin_user:
         return redirect('login')
@@ -664,6 +681,7 @@ def banner_create(request):
     }
     return render(request, 'admin/banner_create.html', context)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def banner_edit(request, id):
     if not request.admin_user:
         return redirect('login')
@@ -699,6 +717,7 @@ def banner_edit(request, id):
     }
     return render(request, 'admin/banner_edit.html', context)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def banner_delete(request, id):
     if request.method == 'POST':
         if not request.admin_user:
@@ -712,4 +731,3 @@ def banner_delete(request, id):
             logger.exception("An error occurred while deleting the banner.")
             return JsonResponse({'success': False, 'message': str(e)}, status=500)
     return JsonResponse({'success': False, 'message': 'Invalid request method.'}, status=405)
-

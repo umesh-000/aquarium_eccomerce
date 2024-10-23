@@ -1,10 +1,10 @@
+from django.utils.deprecation import MiddlewareMixin
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.utils import timezone
 from django.conf import settings
 from accounts import models
-
 
 class SessionExpirationMiddleware:
     def __init__(self, get_response):
@@ -45,3 +45,11 @@ class AdminUserMiddleware:
             request.admin_user = None
 
         return self.get_response(request)
+
+class CacheControlMiddleware(MiddlewareMixin):
+    def process_response(self, request, response):
+        # Set Cache-Control headers
+        response['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+        response['Pragma'] = 'no-cache'
+        response['Expires'] = '0'
+        return response

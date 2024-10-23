@@ -83,6 +83,7 @@ def user_login(request):
                 messages.success(request, "Login Successful!")
                 return redirect('admin_dashboard')
             elif user.user_type == 'customer':
+                messages.success(request, "Login Successful!")
                 return redirect('site_home')
         else:
             messages.error(request, "Invalid credentials!")

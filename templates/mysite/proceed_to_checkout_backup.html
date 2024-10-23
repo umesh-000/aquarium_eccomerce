@@ -1,0 +1,279 @@
+{% extends "mysite/index.html" %}
+{% load static %}
+
+{% block content %}
+    <!-- Page content -->
+    <main class="content-wrapper">
+      <div class="container py-5">
+        <div class="row pt-1 pt-sm-3 pt-lg-4 pb-2 pb-md-3 pb-lg-4 pb-xl-5">
+
+          <!-- Delivery info (Step 1) -->
+          <div class="col-lg-8 col-xl-7 mb-5 mb-lg-0">
+            <div class="d-flex flex-column gap-5 pe-lg-4 pe-xl-0">
+              <div class="d-flex align-items-start">
+                <div class="d-flex align-items-center justify-content-center bg-primary text-white rounded-circle fs-sm fw-semibold lh-1 flex-shrink-0" style="width: 2rem; height: 2rem; margin-top: -.125rem">1</div>
+                <div class="flex-grow-0 flex-shrink-0 ps-3 ps-md-4" style="width: calc(100% - 2rem)">
+                  <h1 class="h5 mb-md-4">Delivery information</h1>
+                  <div class="ms-n5 ms-sm-0">
+                    <h3 class="h6 border-bottom pb-4 mb-0">Choose shipping method</h3>
+                    <div class="mb-lg-4" id="shippingMethod" role="list">
+
+                      <!-- Courier delivery option -->
+                      <div class="border-bottom">
+                        <div class="form-check mb-0" role="listitem" data-bs-toggle="collapse" data-bs-target="#courier" aria-expanded="true" aria-controls="courier">
+                          <label class="form-check-label d-flex align-items-center text-dark-emphasis fw-semibold py-4">
+                            <input type="radio" class="form-check-input fs-base me-2 me-sm-3" name="payment-method" checked="">
+                            Courier delivery
+                            <span class="fw-normal ms-auto">$16.50</span>
+                          </label>
+                        </div>
+                        <div class="collapse show" id="courier" data-bs-parent="#shippingMethod">
+                          <div class="pb-4 ps-3 ms-2 ms-sm-3">
+                            <p class="fs-sm">Choose a courier delivery time convenient for you:</p>
+                            <div class="d-flex justify-content-start">
+                              <button type="button" class="btn btn-icon btn-sm btn-outline-secodary ms-n2" id="courierTimePrev" aria-label="Prev">
+                                <i class="ci-chevron-left fs-lg"></i>
+                              </button>
+                              <div class="swiper swiper-load pt-2" data-swiper="{ &quot;slidesPerView&quot;: 2, &quot;spaceBetween&quot;: 12, &quot;navigation&quot;: { &quot;prevEl&quot;: &quot;#courierTimePrev&quot;, &quot;nextEl&quot;: &quot;#courierTimeNext&quot; }, &quot;breakpoints&quot;: { &quot;600&quot;: { &quot;slidesPerView&quot;: 3, &quot;spaceBetween&quot;: 16 }, &quot;768&quot;: { &quot;slidesPerView&quot;: 4, &quot;spaceBetween&quot;: 16 }, &quot;991&quot;: { &quot;slidesPerView&quot;: 3, &quot;spaceBetween&quot;: 16 }, &quot;1100&quot;: { &quot;slidesPerView&quot;: 4, &quot;spaceBetween&quot;: 12 }, &quot;1250&quot;: { &quot;slidesPerView&quot;: 4, &quot;spaceBetween&quot;: 24 } } }">
+                                <div class="swiper-wrapper">
+                                  <div class="swiper-slide text-center">
+                                    <div class="h6 fs-sm pb-2 mb-0">Monday, 13</div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="courier-time" id="c-mon-1" checked="">
+                                      <label for="c-mon-1" class="btn btn-outline-secondary w-100 rounded-pill">12:00 - 15:00</label>
+                                    </div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="courier-time" id="c-mon-2">
+                                      <label for="c-mon-2" class="btn btn-outline-secondary w-100 rounded-pill">17:00 - 20:00</label>
+                                    </div>
+                                  </div>
+                                  <div class="swiper-slide text-center">
+                                    <div class="h6 fs-sm pb-2 mb-0">Tuesday, 14</div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="courier-time" id="c-tue-1">
+                                      <label for="c-tue-1" class="btn btn-outline-secondary w-100 rounded-pill">09:00 - 12:00</label>
+                                    </div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="courier-time" id="c-tue-2">
+                                      <label for="c-tue-2" class="btn btn-outline-secondary w-100 rounded-pill">14:00 - 19:00</label>
+                                    </div>
+                                  </div>
+                                  <div class="swiper-slide text-center">
+                                    <div class="h6 fs-sm pb-2 mb-0">Wednesday, 15</div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="courier-time" id="c-wed-1">
+                                      <label for="c-wed-1" class="btn btn-outline-secondary w-100 rounded-pill">09:00 - 12:00</label>
+                                    </div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="courier-time" id="c-wed-2">
+                                      <label for="c-wed-2" class="btn btn-outline-secondary w-100 rounded-pill">14:00 - 19:00</label>
+                                    </div>
+                                  </div>
+                                  <div class="swiper-slide text-center">
+                                    <div class="h6 fs-sm pb-2 mb-0">Thursday, 16</div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="courier-time" id="c-thu-1">
+                                      <label for="c-thu-1" class="btn btn-outline-secondary w-100 rounded-pill">12:00 - 15:00</label>
+                                    </div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="courier-time" id="c-thu-2">
+                                      <label for="c-thu-2" class="btn btn-outline-secondary w-100 rounded-pill">17:00 - 20:00</label>
+                                    </div>
+                                  </div>
+                                  <div class="swiper-slide text-center">
+                                    <div class="h6 fs-sm pb-2 mb-0">Friday, 17</div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="courier-time" id="c-fri-1">
+                                      <label for="c-fri-1" class="btn btn-outline-secondary w-100 rounded-pill">09:00 - 12:00</label>
+                                    </div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="courier-time" id="c-fri-2">
+                                      <label for="c-fri-2" class="btn btn-outline-secondary w-100 rounded-pill">14:00 - 19:00</label>
+                                    </div>
+                                  </div>
+                                  <div class="swiper-slide text-center">
+                                    <div class="h6 fs-sm pb-2 mb-0">Saturday, 18</div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="courier-time" id="c-sat-1">
+                                      <label for="c-sat-1" class="btn btn-outline-secondary w-100 rounded-pill">09:00 - 11:00</label>
+                                    </div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="courier-time" id="c-sat-2">
+                                      <label for="c-sat-2" class="btn btn-outline-secondary w-100 rounded-pill">13:00 - 15:00</label>
+                                    </div>
+                                  </div>
+                                  <div class="swiper-slide text-center">
+                                    <div class="h6 fs-sm pb-2 mb-0">Sunday, 19</div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="courier-time" id="c-sun-1">
+                                      <label for="c-sun-1" class="btn btn-outline-secondary w-100 rounded-pill">09:00 - 11:00</label>
+                                    </div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="courier-time" id="c-sun-2">
+                                      <label for="c-sun-2" class="btn btn-outline-secondary w-100 rounded-pill">13:00 - 15:00</label>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <button type="button" class="btn btn-icon btn-sm btn-outline-secodary me-n2" id="courierTimeNext" aria-label="Next">
+                                <i class="ci-chevron-right fs-lg"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Pickup from store option -->
+                      <div class="border-bottom">
+                        <div class="form-check mb-0" role="listitem" data-bs-toggle="collapse" data-bs-target="#pickup" aria-expanded="false" aria-controls="pickup">
+                          <label class="form-check-label d-flex align-items-center text-dark-emphasis fw-semibold py-4">
+                            <input type="radio" class="form-check-input fs-base me-2 me-sm-3" name="payment-method">
+                            Pickup from store
+                            <span class="fw-normal ms-auto">Free</span>
+                          </label>
+                        </div>
+                        <div class="collapse" id="pickup" data-bs-parent="#shippingMethod">
+                          <div class="pb-4 ps-3 ms-2 ms-sm-3">
+                            <p class="fs-sm mb-2">Choose a store nearby:</p>
+                            <div class="w-100 mb-4" style="max-width: 300px">
+                              <select class="form-select" data-select="{ &quot;removeItemButton&quot;: false, &quot;choices&quot;: [ { &quot;value&quot;: &quot;Cartzilla Supercenter&quot;, &quot;label&quot;: &quot;<span class=\&quot;text-dark-emphasis fw-medium\&quot;>Cartzilla Supercenter</span>&quot;, &quot;customProperties&quot;: { &quot;address&quot;: &quot;<span class=\&quot;d-block text-body-secondary fs-xs fw-normal\&quot;>755 Riverpoint Ct, West Sacramento</span>&quot;, &quot;selected&quot;: &quot;<span class=\&quot;text-dark-emphasis fw-medium\&quot;>Cartzilla Supercenter</span>&quot; } }, { &quot;value&quot;: &quot;Cartzilla Electronics&quot;, &quot;label&quot;: &quot;<span class=\&quot;text-dark-emphasis fw-medium\&quot;>Cartzilla Electronics</span>&quot;, &quot;customProperties&quot;: { &quot;address&quot;: &quot;<span class=\&quot;d-block text-body-secondary fs-xs fw-normal\&quot;>8270 Delta Shores Cir S, Sacramento</span>&quot;, &quot;selected&quot;: &quot;<span class=\&quot;text-dark-emphasis fw-medium\&quot;>Cartzilla Electronics</span>&quot; } }, { &quot;value&quot;: &quot;Cartzilla Great Mall&quot;, &quot;label&quot;: &quot;<span class=\&quot;text-dark-emphasis fw-medium\&quot;>Cartzilla Great Mall</span>&quot;, &quot;customProperties&quot;: { &quot;address&quot;: &quot;<span class=\&quot;d-block text-body-secondary fs-xs fw-normal\&quot;>10655 Folsom Blvd, Sacramento</span>&quot;, &quot;selected&quot;: &quot;<span class=\&quot;text-dark-emphasis fw-medium\&quot;>Cartzilla Great Mall</span>&quot; } } ] }" data-select-template="true"></select>
+                            </div>
+                            <p class="fs-sm">Choose a pickup time convenient for you:</p>
+                            <div class="d-flex justify-content-start">
+                              <button type="button" class="btn btn-icon btn-sm btn-outline-secodary ms-n2" id="pickupTimePrev" aria-label="Prev">
+                                <i class="ci-chevron-left fs-lg"></i>
+                              </button>
+                              <div class="swiper swiper-load pt-2" data-swiper="{ &quot;slidesPerView&quot;: 2, &quot;spaceBetween&quot;: 12, &quot;navigation&quot;: { &quot;prevEl&quot;: &quot;#pickupTimePrev&quot;, &quot;nextEl&quot;: &quot;#pickupTimeNext&quot; }, &quot;breakpoints&quot;: { &quot;600&quot;: { &quot;slidesPerView&quot;: 3, &quot;spaceBetween&quot;: 16 }, &quot;768&quot;: { &quot;slidesPerView&quot;: 4, &quot;spaceBetween&quot;: 16 }, &quot;991&quot;: { &quot;slidesPerView&quot;: 3, &quot;spaceBetween&quot;: 16 }, &quot;1100&quot;: { &quot;slidesPerView&quot;: 4, &quot;spaceBetween&quot;: 12 }, &quot;1250&quot;: { &quot;slidesPerView&quot;: 4, &quot;spaceBetween&quot;: 24 } } }">
+                                <div class="swiper-wrapper">
+                                  <div class="swiper-slide text-center">
+                                    <div class="h6 fs-sm pb-2 mb-0">Monday, 13</div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="pickup-time" id="p-mon-1" checked="">
+                                      <label for="p-mon-1" class="btn btn-outline-secondary w-100 rounded-pill">12:00 - 15:00</label>
+                                    </div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="pickup-time" id="p-mon-2">
+                                      <label for="p-mon-2" class="btn btn-outline-secondary w-100 rounded-pill">17:00 - 20:00</label>
+                                    </div>
+                                  </div>
+                                  <div class="swiper-slide text-center">
+                                    <div class="h6 fs-sm pb-2 mb-0">Tuesday, 14</div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="pickup-time" id="p-tue-1">
+                                      <label for="p-tue-1" class="btn btn-outline-secondary w-100 rounded-pill">09:00 - 12:00</label>
+                                    </div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="pickup-time" id="p-tue-2">
+                                      <label for="p-tue-2" class="btn btn-outline-secondary w-100 rounded-pill">14:00 - 19:00</label>
+                                    </div>
+                                  </div>
+                                  <div class="swiper-slide text-center">
+                                    <div class="h6 fs-sm pb-2 mb-0">Wednesday, 15</div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="pickup-time" id="p-wed-1">
+                                      <label for="p-wed-1" class="btn btn-outline-secondary w-100 rounded-pill">09:00 - 12:00</label>
+                                    </div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="pickup-time" id="p-wed-2">
+                                      <label for="p-wed-2" class="btn btn-outline-secondary w-100 rounded-pill">14:00 - 19:00</label>
+                                    </div>
+                                  </div>
+                                  <div class="swiper-slide text-center">
+                                    <div class="h6 fs-sm pb-2 mb-0">Thursday, 16</div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="pickup-time" id="p-thu-1">
+                                      <label for="p-thu-1" class="btn btn-outline-secondary w-100 rounded-pill">12:00 - 15:00</label>
+                                    </div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="pickup-time" id="p-thu-2">
+                                      <label for="p-thu-2" class="btn btn-outline-secondary w-100 rounded-pill">17:00 - 20:00</label>
+                                    </div>
+                                  </div>
+                                  <div class="swiper-slide text-center">
+                                    <div class="h6 fs-sm pb-2 mb-0">Friday, 17</div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="pickup-time" id="p-fri-1">
+                                      <label for="p-fri-1" class="btn btn-outline-secondary w-100 rounded-pill">09:00 - 12:00</label>
+                                    </div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="pickup-time" id="p-fri-2">
+                                      <label for="p-fri-2" class="btn btn-outline-secondary w-100 rounded-pill">14:00 - 19:00</label>
+                                    </div>
+                                  </div>
+                                  <div class="swiper-slide text-center">
+                                    <div class="h6 fs-sm pb-2 mb-0">Saturday, 18</div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="pickup-time" id="p-sat-1">
+                                      <label for="p-sat-1" class="btn btn-outline-secondary w-100 rounded-pill">09:00 - 11:00</label>
+                                    </div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="pickup-time" id="p-sat-2">
+                                      <label for="p-sat-2" class="btn btn-outline-secondary w-100 rounded-pill">13:00 - 15:00</label>
+                                    </div>
+                                  </div>
+                                  <div class="swiper-slide text-center">
+                                    <div class="h6 fs-sm pb-2 mb-0">Sunday, 19</div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="pickup-time" id="p-sun-1">
+                                      <label for="p-sun-1" class="btn btn-outline-secondary w-100 rounded-pill">09:00 - 11:00</label>
+                                    </div>
+                                    <div class="py-1 my-1">
+                                      <input type="radio" class="btn-check" name="pickup-time" id="p-sun-2">
+                                      <label for="p-sun-2" class="btn btn-outline-secondary w-100 rounded-pill">13:00 - 15:00</label>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <button type="button" class="btn btn-icon btn-sm btn-outline-secodary me-n2" id="pickupTimeNext" aria-label="Next">
+                                <i class="ci-chevron-right fs-lg"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Local shipping option -->
+                      <div class="border-bottom">
+                        <div class="form-check mb-0" role="listitem" data-bs-toggle="collapse" data-bs-target="#shipping" aria-expanded="false" aria-controls="shipping">
+                          <label class="form-check-label d-flex align-items-center text-dark-emphasis fw-semibold py-4">
+                            <input type="radio" class="form-check-input fs-base me-2 me-sm-3" name="payment-method">
+                            Local shipping
+                            <span class="fw-normal ms-auto">$23.40</span>
+                          </label>
+                        </div>
+                        <div class="collapse" id="shipping" data-bs-parent="#shippingMethod">
+                          <div class="pb-4 ps-3 ms-2 ms-sm-3">
+                            <div class="alert d-flex align-items-center alert-info mb-3" role="alert">
+                              <i class="ci-info fs-lg me-2"></i>
+                              <div class="fs-sm">Local shipping can take up to <span class="text-info-emphasis fw-semibold">5</span> business days.</div>
+                            </div>
+                            <p class="fs-sm mb-0">Estimated date of delivery - <span class="text-body-emphasis fw-medium">March 15, 2024</span></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <a class="btn btn-lg btn-primary w-100 d-none d-lg-flex" href="{% url "proceed_to_shipping" %}">
+                      Continue
+                      <i class="ci-chevron-right fs-lg ms-1 me-n1"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Shipping address -->
+              <div class="d-flex align-items-start">
+                <div class="d-flex align-items-center justify-content-center bg-body-secondary text-body-secondary rounded-circle fs-sm fw-semibold lh-1 flex-shrink-0" style="width: 2rem; height: 2rem; margin-top: -.125rem">2</div>
+                <h2 class="h5 text-body-secondary ps-3 ps-md-4 mb-0">Shipping address</h2>
+              </div>
+
+              <!-- Payment -->
+              <div class="d-flex align-items-start">
+                <div class="d-flex align-items-center justify-content-center bg-body-secondary text-body-secondary rounded-circle fs-sm fw-semibold lh-1 flex-shrink-0" style="width: 2rem; height: 2rem; margin-top: -.125rem">3</div>
+                <h2 class="h5 text-body-secondary ps-3 ps-md-4 mb-0">Payment</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+{% endblock content %}

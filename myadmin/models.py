@@ -21,7 +21,6 @@ class ParentCategory(models.Model):
     def __str__(self):
         return self.name
     
-
 class Category(models.Model):
     STATUS_CHOICES = [
         (1, 'Active'),
@@ -114,8 +113,8 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
-    
 
+  
 class BannerSlider(models.Model):
     title = models.CharField(max_length=255)
     subtitle = models.CharField(max_length=255, blank=True, null=True)
@@ -131,3 +130,6 @@ class BannerSlider(models.Model):
     class Meta:
         ordering = ['order']
         db_table = 'banner_slider'
+
+
+#to DO 
